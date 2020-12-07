@@ -6,7 +6,29 @@ use PHPMailer\PHPMailer\Exception;
 use Google\Auth\ApplicationDefaultCredentials;
 use GuzzleHttp\Client;
 use GuzzleHttp\HandlerStack;
+function isValidHeader($jwt, $key)
+{
+    try{
+        $id = getDataByJWToken($jwt, $key)->userIdx;
+        return isValidUserJWT($id);
+    } catch (\Exception $e) {
+        return false;
+    }
+}
+function isValidUserJWT($id)
+{
+    $pdo = pdoSqlConnect();
+    $query = "select exists(select user_idx from USER where user_idx = ?) as exist;";
 
+    $st = $pdo->prepare($query);
+    $st->execute([$id]);
+    $st->setFetchMode(PDO::FETCH_ASSOC);
+    $res = $st->fetchAll();
+    $st = null;
+    $pdo = null;
+
+    return intval($res[0]["exist"]);
+}
 function getSQLErrorException($errorLogs, $e, $req)
 {
     $res = (Object)Array();

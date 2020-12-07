@@ -19,7 +19,7 @@ function isValidUser($ID, $pwd){
 
 function getUserIdxByID($server_id) {
     $pdo = pdoSqlConnect();
-    $query = "select user_idx from User where server_id = ?;";
+    $query = "select user_idx from USER where server_id = ?;";
 
     $st = $pdo->prepare($query);
     $st->execute([$server_id]);

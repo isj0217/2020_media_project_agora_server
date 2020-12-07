@@ -1,46 +1,10 @@
 <?php
 
 //READ
-function getUsers()
-{
-    $pdo = pdoSqlConnect();
-    $query = "select * from User;";
-
-    $st = $pdo->prepare($query);
-    //    $st->execute([$param,$param]);
-    $st->execute([]);
-    $st->setFetchMode(PDO::FETCH_ASSOC);
-    $res = $st->fetchAll();
-
-    $st = null;
-    $pdo = null;
-
-    return $res[0];
-}
-
-//READ
-function getUserDetail($userIdx)
-{
-    $pdo = pdoSqlConnect();
-    $query = "select * from Users where userIdx = ?;";
-
-    $st = $pdo->prepare($query);
-    $st->execute([$userIdx]);
-    //    $st->execute();
-    $st->setFetchMode(PDO::FETCH_ASSOC);
-    $res = $st->fetchAll();
-
-    $st = null;
-    $pdo = null;
-
-    return $res[0];
-}
-
-//READ
 function isValidUserIdx($userIdx)
 {
     $pdo = pdoSqlConnect();
-    $query = "select EXISTS(select * from Users where userIdx = ?) exist;";
+    $query = "select EXISTS(select * from USER where user_idx = ?) exist;";
 
     $st = $pdo->prepare($query);
     $st->execute([$userIdx]);
@@ -55,23 +19,10 @@ function isValidUserIdx($userIdx)
 }
 
 
-function createUser($ID, $pwd, $name)
-{
-    $pdo = pdoSqlConnect();
-    $query = "INSERT INTO User (ID, pwd, name) VALUES (?,?,?);";
-
-    $st = $pdo->prepare($query);
-    $st->execute([$ID, $pwd, $name]);
-
-    $st = null;
-    $pdo = null;
-
-}
-
 function isValidNaverUser($server_id)
 {
     $pdo = pdoSqlConnect();
-    $query = "select EXISTS(select * from User where server_id = ?) exist;";
+    $query = "select EXISTS(select * from USER where server_id = ?) exist;";
 
     $st = $pdo->prepare($query);
     $st->execute([$server_id]);
@@ -88,7 +39,7 @@ function isValidNaverUser($server_id)
 function isValidNickname($nickname)
 {
     $pdo = pdoSqlConnect();
-    $query = "select EXISTS(select * from User where user_nickname = ?) exist;";
+    $query = "select EXISTS(select * from USER where user_nickname = ?) exist;";
 
     $st = $pdo->prepare($query);
     $st->execute([$nickname]);
@@ -101,13 +52,13 @@ function isValidNickname($nickname)
 
     return $res[0]['exist'];
 }
-function isValidDepartment_idx($department_idx)
+function isValidDepartment_idx($department_name)
 {
     $pdo = pdoSqlConnect();
-    $query = "select EXISTS(select * from Department where department_idx = ?) exist;";
+    $query = "select EXISTS(select * from DEPARTMENT where department_name = ?) exist;";
 
     $st = $pdo->prepare($query);
-    $st->execute([$department_idx]);
+    $st->execute([$department_name]);
     //    $st->execute();
     $st->setFetchMode(PDO::FETCH_ASSOC);
     $res = $st->fetchAll();
@@ -120,7 +71,7 @@ function isValidDepartment_idx($department_idx)
 function isValidStudentId($student_id)
 {
     $pdo = pdoSqlConnect();
-    $query = "select EXISTS(select * from User where user_student_id = ?) exist;";
+    $query = "select EXISTS(select * from USER where user_student_id = ?) exist;";
 
     $st = $pdo->prepare($query);
     $st->execute([$student_id]);
@@ -133,13 +84,13 @@ function isValidStudentId($student_id)
 
     return $res[0]['exist'];
 }
-function postUser($username, $nickname, $student_id, $department_idx, $server_id)
+function postUser($username, $nickname, $student_id, $department_name, $server_id)
 {
     $pdo = pdoSqlConnect();
-    $query = "insert into User (user_name, user_nickname, user_student_id, department_idx, server_id, is_deleted) values (?, ?, ?, ?, ?, 0);";
+    $query = "insert into USER (user_name, user_nickname, user_student_id, department_name, server_id, is_deleted) values (?, ?, ?, ?, ?, 0);";
 
     $st = $pdo->prepare($query);
-    $st->execute([$username, $nickname, $student_id, $department_idx, $server_id]);
+    $st->execute([$username, $nickname, $student_id, $department_name, $server_id]);
     $st = null;
     $pdo = null;
     //    $st->execute();

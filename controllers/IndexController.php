@@ -83,6 +83,7 @@ try {
                 echo json_encode($res, JSON_NUMERIC_CHECK);
                 break;
             }
+
         case "postUser":
             http_response_code(200);
 
@@ -93,10 +94,10 @@ try {
                 echo json_encode($res, JSON_NUMERIC_CHECK);
                 break;
             }
-            else if (!isValidDepartment_idx($req->department_idx)) {
+            else if (!isValidDepartment_idx($req->department_name)) {
                 $res->is_success = FAlSE;
                 $res->code = 202;
-                $res->message = "존재하지 않는 학과 번호입니다. 학과 번호 값을 확인하세요";
+                $res->message = "올바르지 않는 학과입니다. 학과 이름을 다시 입력하세요";
                 echo json_encode($res, JSON_NUMERIC_CHECK);
                 break;
             }
@@ -111,38 +112,20 @@ try {
 
 
 
-            $username = $req->user_name;
+            $username = $req->server_name;
             $nickname = $req->nickname;
             $server_id = $req->server_id;
-            $department_idx = $req->department_idx;
+            $department_name = $req->department_name;
             $student_id = $req->student_id;
 
 
-            postUser($username, $nickname, $student_id, $department_idx, $server_id);
+            postUser($username, $nickname, $student_id, $department_name, $server_id);
             $res->is_success = TRUE;
             $res->code = 100;
             $res->message = "회원가입 성공";
             echo json_encode($res, JSON_NUMERIC_CHECK);
             break;
-
-        case "deleteUser":
-            http_response_code(200);
-            $server_id = $req->server_id;
-            if (!isValidNaverUser($server_id)) {
-                $res->is_success = FALSE;
-                $res->code = 201;
-                $res->message = "존재하지 않는 유저입니다. 회원가입을 하세요";
-                echo json_encode($res, JSON_NUMERIC_CHECK);
-                break;
-            }
-
-
-            deleteUser($server_id);
-            $res->is_success = TRUE;
-            $res->code = 100;
-            $res->message = "회원가입 성공";
-            echo json_encode($res, JSON_NUMERIC_CHECK);
-            break;
+            
 
         case "getUsers":
             http_response_code(200);
